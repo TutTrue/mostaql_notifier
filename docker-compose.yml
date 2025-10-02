@@ -1,7 +1,7 @@
 services:
   mostaql-notifier:
-    # build: .
-    image: ghcr.io/tuttrue/mostaql_notifier:latest
+    build: .
+    # image: ghcr.io/tuttrue/mostaql_notifier:latest
     container_name: mostaql-notifier
     restart: unless-stopped
     volumes:
@@ -11,7 +11,7 @@ services:
       - ./config:/app/config:ro
     environment:
       - TZ=UTC
-      - MOSTAQLWEB=${MOSTAQLWEB}
+      - MOSTAQLWEB=eyJpdiI6InlmS254NVp5MVVVUXBqMVNzcndmd2c9PSIsInZhbHVlIjoidWVBTTBIWTFpSFd5aENCQVA1YWJKR1l0bHpnODBZNkJ1RGREdTlFL0xOZTdFa0VlUUxkRTlxS2NZR1Jhd2sxVkoyZnlZQTlnU1U4LzEvV2wzWVVDMVltS08rcExhclFubjJnTzNIRE9YU2lSaDVRWUQvWjM0MVRBeVBPdWZtdHQiLCJtYWMiOiI4ZDlkZTcwZjI4MDU1NWI0MmE2NDYwYWM1MDczOTY3YWFjMmFlMTY5MDBlMjc2MjcxYzNhMDAwZmMxYzM0NWUwIiwidGFnIjoiIn0%3D
     # Optional: Add health check
     healthcheck:
       test: ["CMD", "pgrep", "cron"]

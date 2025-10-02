@@ -23,6 +23,10 @@ COPY main.py .
 COPY entrypoint.sh .
 RUN chmod +x entrypoint.sh
 
+# Copy cron runner script and make it executable
+COPY run_cron.sh .
+RUN chmod +x run_cron.sh
+
 # Create a non-root user
 RUN useradd -m -u 1000 mostaql && chown -R mostaql:mostaql /app
 
@@ -30,7 +34,8 @@ RUN useradd -m -u 1000 mostaql && chown -R mostaql:mostaql /app
 RUN mkdir -p /app/logs && chown mostaql:mostaql /app/logs
 
 # Set up cron job to run every 1 minute (as root, but execute as mostaql user)
-RUN echo "*/1 * * * * su - mostaql -c \"cd /app && MOSTAQLWEB='\$MOSTAQLWEB' /usr/local/bin/python main.py >> /app/logs/mostaql.log 2>&1\"" | crontab -
+# The environment variable will be passed from the entrypoint script
+RUN echo "*/1 * * * * /app/run_cron.sh >> /app/logs/mostaql.log 2>&1" | crontab -
 
 # Keep running as root for cron to work
 # USER mostaql
