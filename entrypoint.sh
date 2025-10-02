@@ -7,6 +7,10 @@ service cron start
 # Create logs directory if it doesn't exist
 mkdir -p /app/logs
 
+# Write environment variables to a file for cron to access
+echo "export MOSTAQLWEB='$MOSTAQLWEB'" > /app/.env_vars
+chmod 644 /app/.env_vars
+
 # Run the script once immediately as mostaql user
 echo "$(date): Starting Mostaql notifier..." >> /app/logs/mostaql.log
 su - mostaql -c "cd /app && MOSTAQLWEB='$MOSTAQLWEB' python main.py" >> /app/logs/mostaql.log 2>&1
