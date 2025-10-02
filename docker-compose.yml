@@ -1,0 +1,29 @@
+services:
+  mostaql-notifier:
+    # build: .
+    image: ghcr.io/tuttrue/mostaql_notifier:latest
+    container_name: mostaql-notifier
+    restart: unless-stopped
+    volumes:
+      # Mount logs directory to persist logs on host
+      - ./logs:/app/logs
+      # Optional: Mount a config file if you want to update cookies without rebuilding
+      - ./config:/app/config:ro
+    environment:
+      - TZ=UTC
+      - MOSTAQLWEB=${MOSTAQLWEB}
+    # Optional: Add health check
+    healthcheck:
+      test: ["CMD", "pgrep", "cron"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    # Optional: Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+        reservations:
+          memory: 256M
+
